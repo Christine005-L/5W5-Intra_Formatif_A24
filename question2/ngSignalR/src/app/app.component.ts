@@ -76,6 +76,8 @@ export class AppComponent {
   }
 
   buyPizza() {
+    this.hubConnection!.invoke('BuyPizza', this.selectedChoice)
+
     this.hubConnection!.on('UpdateNbPizzaAndMoney', (money, pizzas) => {
       this.money = money;
       this.nbPizzas = pizzas;
