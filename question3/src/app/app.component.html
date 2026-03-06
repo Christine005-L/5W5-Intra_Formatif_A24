@@ -42,11 +42,16 @@
 
     <mat-form-field style="width: 100%">
       <mat-label>Commentaire</mat-label>
-      <textarea matInput placeholder="Votre commentaire" formControlName="comments"></textarea>
-      @if(formGroup.get('comments')?.hasError('minLength')) {
+      <input matInput placeholder="Votre commentaire" formControlName="comments"/>
+      @if(formGroup.get('comments')?.hasError('minWords')) {
       <mat-error> Votre commentaire doit faire au moins 10 mots </mat-error>
       }
     </mat-form-field>
+    @if(formGroup.hasError('nomDansCommentaire')) {
+      <mat-error>
+        Votre commentaire ne doit pas contenir le nom de l'utilisateur
+      </mat-error>
+    }
 
     <mat-card-actions align="end">
       <button  mat-raised-button color="primary" [disabled]="!formGroup.valid">Acheter</button>

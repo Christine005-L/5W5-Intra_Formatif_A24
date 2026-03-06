@@ -28,7 +28,7 @@ export class AppComponent {
         name: ['', [Validators.required]],
         roadnumber: ['', [Validators.required, Validators.min(1000), Validators.max(9999)]],
         postalcode: ['', []],
-        comments: ['', [Validators.minLength(10)]]
+        comments: ['', [minWords(10)]]
       },
       {
         validators: nomDansCommentaire()
@@ -37,18 +37,30 @@ export class AppComponent {
   }
 }
 
+export function minWords(min: number): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+
+    if (!control.value) return null;
+
+    const words = control.value.trim().split(" ");
+
+    const estValide = words.length >= min;
+
+    return estValide ? null : { minWords: true }
+  };
+}
 
 export function nomDansCommentaire(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
-    const comments = control.value;
-    const name = control.value;
+    const comments = control.get('comments')?.value;
+    const name = control.get('name')?.value;
     // On regarde si le champ est rempli avant de faire la validation
-    if (!comments?.value || !name?.value) {
+    if (!comments|| !name) {
       // On attend que le champ soit rempli avant de le valider
       return null;
     }
     // On fait notre validation. Includes retourne un booléen.
-    const estValide = !comments.value.includes(name.value);
+    const estValide = !comments.includes(name);
 
     return estValide ? null : { nomDansCommentaire: true }
   };
